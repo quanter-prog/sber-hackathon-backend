@@ -10,6 +10,7 @@ import ru.hackaton.dev.repository.IBoatRepository;
 import ru.hackaton.dev.service.IBoatService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -73,22 +74,24 @@ public class BoatServiceImpl implements IBoatService {
         boatRepository.deleteById(UUID.fromString(boatId));
     }
 
-    //@Scheduled(fixedDelay = 1000*4)
+    @Scheduled(fixedDelay = 1000*4)
     private void updateCoordinates() {
-        /*
-	Optional<Boat> optionalBoat = boatRepository.findById();
-        Boat boat = optionalBoat.orElseThrow();
-        String[] keys = (String[]) positions.keySet().toArray();
-        int keyNumber = 0;
-        for (int i = 0; i < keys.length; i++) {
-            if (keys[i].equals(boat.getLatitude())) {
-                keyNumber = i;
-                break;
+        Optional<Boat> optionalBoat = boatRepository.findById(UUID.fromString("296117d7-963c-452f-8a76-2b3959bab83e"));
+        if (optionalBoat.isPresent()) {
+            List<String> keys = new ArrayList<>(positions.keySet());
+            int keyNumber = 0;
+            for (int i = 0; i < keys.size(); i++) {
+                if (keys.get(i).equals(optionalBoat.get().getLatitude())) {
+                    keyNumber = i;
+                    break;
+                }
             }
+            if (keyNumber + 1 == keys.size()) {
+                keyNumber = 0;
+            }
+            optionalBoat.get().setLatitude(keys.get(keyNumber + 1));
+            optionalBoat.get().setLongitude(positions.getOrDefault(keys.get(keyNumber + 1), "228.1488"));
+            boatRepository.save(optionalBoat.get());
         }
-        boat.setLatitude(keys[keyNumber + 1]);
-        boat.setLongitude(positions.getOrDefault(keys[keyNumber + 1], "228.1488"));
-        boatRepository.save(boat);
-	*/
     }
 }

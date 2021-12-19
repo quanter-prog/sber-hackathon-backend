@@ -5,11 +5,8 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     open-in-view: false
 
 server:
   port: 8080
-  tomcat:
-    accessLogEnabled: true
-    accessLogPattern: '%a asdasd'
