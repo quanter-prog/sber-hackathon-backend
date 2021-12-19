@@ -10,14 +10,14 @@ import ru.hackaton.dev.repository.IBoatRepository;
 import ru.hackaton.dev.service.IBoatService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
 public class BoatServiceImpl implements IBoatService {
 
     private final IBoatRepository boatRepository;
-    private Map<String, String> positions;
+    /** Hardcode boat moving */
+    private final Map<String, String> positions;
 
     @Autowired
     public BoatServiceImpl(IBoatRepository repository) {
@@ -74,6 +74,9 @@ public class BoatServiceImpl implements IBoatService {
         boatRepository.deleteById(UUID.fromString(boatId));
     }
 
+    /**
+     * Scheduled (every 4 seconds) method for boat moving
+     */
     @Scheduled(fixedDelay = 1000*4)
     private void updateCoordinates() {
         Optional<Boat> optionalBoat = boatRepository.findById(UUID.fromString("296117d7-963c-452f-8a76-2b3959bab83e"));
@@ -87,10 +90,10 @@ public class BoatServiceImpl implements IBoatService {
                 }
             }
             if (keyNumber + 1 == keys.size()) {
-                keyNumber = 0;
+                keyNumber = -1;
             }
             optionalBoat.get().setLatitude(keys.get(keyNumber + 1));
-            optionalBoat.get().setLongitude(positions.getOrDefault(keys.get(keyNumber + 1), "228.1488"));
+            optionalBoat.get().setLongitude(positions.getOrDefault(keys.get(keyNumber + 1), "37.647602"));
             boatRepository.save(optionalBoat.get());
         }
     }
