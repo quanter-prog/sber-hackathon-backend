@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/hackaton}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    open-in-view: false
+
+server:
+  address: "192.168.31.222"
+  port: 8888
+  tomcat:
+    accessLogEnabled: true
+    accessLogPattern: '%a asdasd'
